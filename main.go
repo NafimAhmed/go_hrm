@@ -65,7 +65,7 @@ func main() {
 
 		query := bson.D{{}}
 
-		cursore, err := mg.Db.Collection("employee").Find(c.Context(), query)
+		cursore, err := mg.Db.Collection("employees").Find(c.Context(), query)
 
 		if err != nil {
 			return c.Status(500).SendString(err.Error())
