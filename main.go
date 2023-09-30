@@ -18,10 +18,10 @@ type MongoInstance struct {
 }
 
 type Employee struct {
-	ID     string  `json:"id,omitempty",bson:"_id,omitempty"`
+	ID     string  `json:"id"` //,omitempty",bson:"_id,omitempty"`
 	Name   string  `json:"name"`
 	Salary float64 `json:"salary"`
-	age    float64 `json:"age"`
+	Age    float64 `json:"age"`
 }
 
 var mg MongoInstance
@@ -92,7 +92,7 @@ func main() {
 			return c.Status(400).SendString(err.Error())
 		}
 
-		employee.ID = ""
+		//employee.ID = ""
 
 		insertionResult, err := collection.InsertOne(c.Context(), employee)
 
@@ -134,7 +134,7 @@ func main() {
 				Key: "$set",
 				Value: bson.D{
 					{Key: "name", Value: employee.Name},
-					{Key: "age", Value: employee.age},
+					{Key: "age", Value: employee.Age},
 					{Key: "salary", Value: employee.Salary},
 				},
 			},
