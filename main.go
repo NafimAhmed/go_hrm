@@ -24,6 +24,13 @@ type Employee struct {
 	Age    float64 `json:"age"`
 }
 
+type Attendance struct {
+	ID      string `json:"id"`
+	Date    string `json:"date"`
+	Intime  string `json:"intime"`
+	Outtime string `json:"outtime"`
+}
+
 var mg MongoInstance
 
 const dbName = "fiber_hrms"
@@ -84,6 +91,7 @@ func main() {
 		return c.JSON(employee)
 
 	})
+
 	app.Post("/employee", func(c *fiber.Ctx) error {
 		collection := mg.Db.Collection("employees")
 		employee := new(Employee)
@@ -111,6 +119,39 @@ func main() {
 		return c.Status(201).JSON(createEmployee)
 
 	})
+
+	//////////////////////////////////////////////////////////////////
+
+	app.Post("/attendance", func(c *fiber.Ctx) error {
+		collection := mg.Db.Collection("attendances")
+		attendance := new(Attendance)
+
+		if err := c.BodyParser(attendance); err != nil {
+			return c.Status(400).SendString(err.Error())
+		}
+
+		//employee.ID = ""
+
+		insertionResult, err := collection.InsertOne(c.Context(), attendance)
+
+		if err != nil {
+			return c.Status(500).SendString(err.Error())
+		}
+
+		filter := bson.D{{Key: "_id", Value: insertionResult.InsertedID}}
+
+		creatRecord := collection.FindOne(c.Context(), filter)
+
+		createAttendance := &Attendance{}
+
+		creatRecord.Decode(createAttendance)
+
+		return c.Status(200).JSON(createAttendance)
+
+	})
+
+	//////////////////////////////////////////////////////////////
+
 	app.Put("/employee/:id", func(c *fiber.Ctx) error {
 
 		idParam := c.Params("id")
