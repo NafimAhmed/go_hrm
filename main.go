@@ -120,7 +120,7 @@ func main() {
 
 	})
 
-	//////////////////////////////////////////////////////////////////
+	
 
 	app.Post("/attendance", func(c *fiber.Ctx) error {
 		collection := mg.Db.Collection("attendances")
@@ -150,7 +150,7 @@ func main() {
 
 	})
 
-	//////////////////////////////////////////////////////////////
+	
 
 	app.Put("/employee/:id", func(c *fiber.Ctx) error {
 
